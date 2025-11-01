@@ -12,6 +12,11 @@ export default function App() {
     );
   };
 
+  const handleAddTodo = (title: string) => {
+    const newTodo = { id: Date.now(), title, completed: false };
+    setTodos((prev) => [newTodo, ...prev]);
+  };
+
   return (
     <main className="min-h-screen bg-white">
       <section className="mx-auto flex min-h-screen max-w-xl flex-col px-4 py-12">
@@ -25,7 +30,7 @@ export default function App() {
         </header>
 
         <div className="flex flex-1 flex-col gap-8">
-          <AddTodoForm />
+          <AddTodoForm onAdd={handleAddTodo} />
 
           {todos.length > 0 ? (
             <ul className="divide-y divide-gray-200 border-y border-gray-200">
