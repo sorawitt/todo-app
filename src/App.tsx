@@ -1,39 +1,16 @@
-import { useEffect, useState } from "react";
 import AddTodoForm from "./components/AddTodoForm";
 import TodoSummary from "./components/TodoSummary";
 import TodoList from "./components/TodoList";
-import type { Todo } from "./types/todo";
+import useTodos from "./hook/useTodos";
 
 export default function App() {
-  const [todos, setTodos] = useState<Todo[]>(() => {
-    if (typeof window === "undefined") return [];
-    const stored = window.localStorage.getItem("todos");
-    return stored ? (JSON.parse(stored) as Todo[]) : [];
-  });
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    window.localStorage.setItem("todos", JSON.stringify(todos));
-  }, [todos]);
-
-  const handleCompletedChange = (id: number, completed: boolean) => {
-    setTodos((prev) =>
-      prev.map((todo) => (todo.id === id ? { ...todo, completed } : todo))
-    );
-  };
-
-  const handleAddTodo = (title: string) => {
-    const newTodo = { id: Date.now(), title, completed: false };
-    setTodos((prev) => [newTodo, ...prev]);
-  };
-
-  const handleDelete = (id: number) => {
-    setTodos((prev) => prev.filter((todo) => todo.id !== id));
-  };
-
-  const handleClearCompleted = () => {
-    setTodos((prev) => prev.filter((todo) => !todo.completed));
-  };
+  const {
+    todos,
+    handleAddTodo,
+    handleCompletedChange,
+    handleDelete,
+    handleClearCompleted,
+  } = useTodos();
 
   return (
     <main className="min-h-screen px-4 py-12">
