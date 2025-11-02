@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { Todo } from "../types/todo";
+import type { AddTodoRequest, Todo } from "../types/todo";
 
 export default function useTodos() {
   const [todos, setTodos] = useState<Todo[]>(() => {
@@ -8,23 +8,34 @@ export default function useTodos() {
     return stored ? (JSON.parse(stored) as Todo[]) : [];
   });
 
+  const fetchTodos = async () => {
+    try {
+      const response = await fetch(
+        "https://690711e5b1879c890ed8ba14.mockapi.io/api/v1/todos"
+      );
+      const todos: Todo[] = await response.json();
+      console.log("Success", todos);
+    } catch (e) {
+      console.log("Error ja", e);
+    }
+  };
   useEffect(() => {
+    fetchTodos();
+  }, []);
+
+  useEffect(() => {
+    console.log("Kong Sec");
     if (typeof window === "undefined") return;
     window.localStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
 
-  const handleCompletedChange = (id: number, completed: boolean) => {
-    setTodos((prev) =>
-      prev.map((todo) => (todo.id === id ? { ...todo, completed } : todo))
-    );
-  };
+  const handleCompletedChange = (id: string, completed: boolean) => {};
 
   const handleAddTodo = (title: string) => {
-    const newTodo = { id: Date.now(), title, completed: false };
-    setTodos((prev) => [newTodo, ...prev]);
+    const request: AddTodoRequest = { title };
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: string) => {
     setTodos((prev) => prev.filter((todo) => todo.id !== id));
   };
 

@@ -3,8 +3,8 @@ import type { Todo } from "../types/todo";
 
 interface TodoItemProps {
   todo: Todo;
-  onCompletedChange: (id: number, completed: boolean) => void;
-  onDelete: (id: number) => void;
+  onCompletedChange: (id: string, completed: boolean) => void;
+  onDelete: (id: string) => void;
 }
 
 export default function TodoItem({
@@ -25,9 +25,7 @@ export default function TodoItem({
         />
         <span
           className={
-            todo.completed
-              ? "text-base line-through opacity-60"
-              : "text-base"
+            todo.completed ? "text-base line-through opacity-60" : "text-base"
           }
         >
           {todo.title}

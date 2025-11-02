@@ -3,8 +3,8 @@ import TodoItem from "./TodoItem";
 
 interface TodoListProps {
   todos: Todo[];
-  onCompletedChange: (id: number, completed: boolean) => void;
-  onDelete: (id: number) => void;
+  onCompletedChange: (id: string, completed: boolean) => void;
+  onDelete: (id: string) => void;
 }
 
 export default function TodoList({

@@ -1,5 +1,9 @@
 export interface Todo {
-    id: number;
-    title: string;
-    completed: boolean;
+  id: string;
+  title: string;
+  completed: boolean;
+}
+
+export interface AddTodoRequest {
+  title: string;
 }
