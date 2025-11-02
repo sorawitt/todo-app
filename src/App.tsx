@@ -1,6 +1,7 @@
 import { useState } from "react";
 import AddTodoForm from "./components/AddTodoForm";
 import { dummyTodos } from "./data/todos";
+import TodoSummary from "./components/TodoSummary";
 import TodoList from "./components/TodoList";
 
 export default function App() {
@@ -19,6 +20,10 @@ export default function App() {
 
   const handleDelete = (id: number) => {
     setTodos((prev) => prev.filter((todo) => todo.id !== id));
+  };
+
+  const handleClearCompleted = () => {
+    setTodos((prev) => prev.filter((todo) => !todo.completed));
   };
 
   return (
@@ -47,6 +52,7 @@ export default function App() {
           ) : (
             <p className="text-sm text-gray-500">Nothing on your list yet.</p>
           )}
+          <TodoSummary todos={todos} onClearCompleted={handleClearCompleted} />
         </div>
       </section>
     </main>
