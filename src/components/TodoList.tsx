@@ -16,7 +16,7 @@ export default function TodoList({
     (a, b) => Number(a.completed) - Number(b.completed)
   );
   return (
-    <div className="space-y-2">
+    <ul className="space-y-2">
       {todosSorted.map((todo) => (
         <li key={todo.id} className="py-1">
           <TodoItem
@@ -26,6 +26,6 @@ export default function TodoList({
           />
         </li>
       ))}
-    </div>
+    </ul>
   );
 }

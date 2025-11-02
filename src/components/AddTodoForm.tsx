@@ -18,7 +18,7 @@ export default function AddTodoForm({ onAdd }: AddTodoFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-md border border-gray-200 px-4 py-3 transition focus-within:border-gray-400"
+      className="rounded border px-4 py-3"
     >
       <label htmlFor="todo-input" className="sr-only">
         Add a new todo
@@ -29,7 +29,7 @@ export default function AddTodoForm({ onAdd }: AddTodoFormProps) {
         placeholder="Write a todo and press Enter"
         value={value}
         onChange={(event) => setValue(event.target.value)}
-        className="w-full bg-transparent text-base text-gray-900 outline-none placeholder:text-gray-400"
+        className="w-full bg-transparent text-base outline-none"
       />
     </form>
   );

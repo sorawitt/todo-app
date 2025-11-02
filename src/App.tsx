@@ -27,30 +27,26 @@ export default function App() {
   };
 
   return (
-    <main className="min-h-screen bg-white">
-      <section className="mx-auto flex min-h-screen max-w-xl flex-col px-4 py-12">
-        <header className="mb-10 space-y-2 text-center">
-          <h1 className="text-3xl font-semibold tracking-tight text-gray-900">
-            Your Todos
-          </h1>
-          <p className="text-sm text-gray-500">
+    <main className="min-h-screen px-4 py-12">
+      <section className="mx-auto flex min-h-screen max-w-xl flex-col gap-10">
+        <header className="space-y-2 text-center">
+          <h1 className="text-3xl font-semibold tracking-tight">Your Todos</h1>
+          <p className="text-sm opacity-70">
             Keep it lean. Check off what matters.
           </p>
         </header>
 
-        <div className="flex flex-1 flex-col gap-8">
+        <div className="flex flex-1 flex-col gap-6">
           <AddTodoForm onAdd={handleAddTodo} />
 
           {todos.length > 0 ? (
-            <ul className="divide-y divide-gray-200 border-y border-gray-200">
-              <TodoList
-                todos={todos}
-                onCompletedChange={handleCompletedChange}
-                onDelete={handleDelete}
-              />
-            </ul>
+            <TodoList
+              todos={todos}
+              onCompletedChange={handleCompletedChange}
+              onDelete={handleDelete}
+            />
           ) : (
-            <p className="text-sm text-gray-500">Nothing on your list yet.</p>
+            <p className="text-sm opacity-70">Nothing on your list yet.</p>
           )}
           <TodoSummary todos={todos} onClearCompleted={handleClearCompleted} />
         </div>
