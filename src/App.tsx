@@ -1,7 +1,7 @@
 import { useState } from "react";
 import AddTodoForm from "./components/AddTodoForm";
-import TodoItem from "./components/TodoItem";
 import { dummyTodos } from "./data/todos";
+import TodoList from "./components/TodoList";
 
 export default function App() {
   const [todos, setTodos] = useState(dummyTodos);
@@ -15,6 +15,10 @@ export default function App() {
   const handleAddTodo = (title: string) => {
     const newTodo = { id: Date.now(), title, completed: false };
     setTodos((prev) => [newTodo, ...prev]);
+  };
+
+  const handleDelete = (id: number) => {
+    setTodos((prev) => prev.filter((todo) => todo.id !== id));
   };
 
   return (
@@ -34,14 +38,11 @@ export default function App() {
 
           {todos.length > 0 ? (
             <ul className="divide-y divide-gray-200 border-y border-gray-200">
-              {todos.map((todo) => (
-                <li key={todo.id} className="py-1">
-                  <TodoItem
-                    todo={todo}
-                    onCompletedChange={handleCompletedChange}
-                  />
-                </li>
-              ))}
+              <TodoList
+                todos={todos}
+                onCompletedChange={handleCompletedChange}
+                onDelete={handleDelete}
+              />
             </ul>
           ) : (
             <p className="text-sm text-gray-500">Nothing on your list yet.</p>
