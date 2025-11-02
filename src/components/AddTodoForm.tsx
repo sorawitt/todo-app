@@ -16,10 +16,7 @@ export default function AddTodoForm({ onAdd }: AddTodoFormProps) {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="rounded border px-4 py-3"
-    >
+    <form onSubmit={handleSubmit} className="rounded border px-4 py-3">
       <label htmlFor="todo-input" className="sr-only">
         Add a new todo
       </label>
