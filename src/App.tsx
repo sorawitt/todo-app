@@ -1,4 +1,5 @@
 import AddTodoForm from "./components/AddTodoForm";
+import { Toast } from "./components/Toast";
 import TodoSummary from "./components/TodoSummary";
 import TodoList from "./components/TodoList";
 import useTodos from "./hook/useTodos";
@@ -10,6 +11,8 @@ export default function App() {
     handleCompletedChange,
     handleDelete,
     handleClearCompleted,
+    toast,
+    clearToast,
   } = useTodos();
 
   return (
@@ -37,6 +40,14 @@ export default function App() {
           <TodoSummary todos={todos} onClearCompleted={handleClearCompleted} />
         </div>
       </section>
+
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={clearToast}
+        />
+      )}
     </main>
   );
 }

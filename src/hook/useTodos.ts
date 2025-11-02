@@ -46,17 +46,32 @@ async function removeTodo(id: string) {
   });
 }
 
+type ToastState = {
+  message: string;
+  type: "success" | "error";
+};
+
 export default function useTodos() {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [toast, setToast] = useState<ToastState | null>(null);
+
+  const clearToast = useCallback(() => setToast(null), []);
+
+  const setErrorToast = useCallback((error: unknown, fallback: string) => {
+    const message =
+      error instanceof Error && error.message ? error.message : fallback;
+    console.error(fallback, error);
+    setToast({ message, type: "error" });
+  }, []);
 
   const loadTodos = useCallback(async () => {
     try {
       const data = await listTodos();
       setTodos(data);
     } catch (error) {
-      console.error("Failed to load todos", error);
+      setErrorToast(error, "Failed to load todos");
     }
-  }, []);
+  }, [setErrorToast]);
 
   useEffect(() => {
     loadTodos();
@@ -67,17 +82,21 @@ export default function useTodos() {
     window.localStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
 
-  const handleAddTodo = useCallback(async (title: string) => {
-    const trimmed = title.trim();
-    if (!trimmed) return;
+  const handleAddTodo = useCallback(
+    async (title: string) => {
+      const trimmed = title.trim();
+      if (!trimmed) return;
 
-    try {
-      const created = await createTodo({ title: trimmed });
-      setTodos((prev) => [...prev, created]);
-    } catch (error) {
-      console.error("Failed to add todo", error);
-    }
-  }, []);
+      try {
+        const created = await createTodo({ title: trimmed });
+        setTodos((prev) => [...prev, created]);
+        setToast({ message: `Added "${created.title}"`, type: "success" });
+      } catch (error) {
+        setErrorToast(error, "Failed to add todo");
+      }
+    },
+    [setErrorToast]
+  );
 
   const handleCompletedChange = useCallback(
     async (id: string, completed: boolean) => {
@@ -86,21 +105,31 @@ export default function useTodos() {
         setTodos((prev) =>
           prev.map((todo) => (todo.id === id ? updated : todo))
         );
+        setToast({
+          message: `Marked "${updated.title}" as ${
+            completed ? "done" : "pending"
+          }`,
+          type: "success",
+        });
       } catch (error) {
-        console.error("Failed to update todo", error);
+        setErrorToast(error, "Failed to update todo");
       }
     },
-    []
+    [setErrorToast]
   );
 
-  const handleDelete = useCallback(async (id: string) => {
-    try {
-      await removeTodo(id);
-      setTodos((prev) => prev.filter((todo) => todo.id !== id));
-    } catch (error) {
-      console.error("Failed to delete todo", error);
-    }
-  }, []);
+  const handleDelete = useCallback(
+    async (id: string) => {
+      try {
+        await removeTodo(id);
+        setTodos((prev) => prev.filter((todo) => todo.id !== id));
+        setToast({ message: "Todo deleted", type: "success" });
+      } catch (error) {
+        setErrorToast(error, "Failed to delete todo");
+      }
+    },
+    [setErrorToast]
+  );
 
   const handleClearCompleted = useCallback(async () => {
     const completedIds = todos
@@ -111,10 +140,11 @@ export default function useTodos() {
     try {
       await Promise.all(completedIds.map((id) => removeTodo(id)));
       setTodos((prev) => prev.filter((todo) => !todo.completed));
+      setToast({ message: "Cleared completed todos", type: "success" });
     } catch (error) {
-      console.error("Failed to clear completed todos", error);
+      setErrorToast(error, "Failed to clear completed todos");
     }
-  }, [todos]);
+  }, [setErrorToast, todos]);
 
   return {
     todos,
@@ -122,5 +152,7 @@ export default function useTodos() {
     handleCompletedChange,
     handleDelete,
     handleClearCompleted,
+    toast,
+    clearToast,
   };
 }
