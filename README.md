@@ -4,10 +4,17 @@ This project is a clean and simple todo list built with React, TypeScript, Bun, 
 It focuses on a minimal interface where you can add new tasks, mark them as done,  
 and keep the list short and tidy.
 
+## Live Demo
+
+> 🚀 **Live Demo:** <span style="color:#059669">https://todo-app-wine-eta.vercel.app/</span>  
+> Take the latest build for a spin anytime.
+
 ## Features
 
 - Add a task by typing and pressing Enter.
 - Tick a checkbox to mark a task as complete.
+- Toast feedback keeps you informed about success or error states.
+- Tasks sync to a hosted mock API and mirror into local storage for quick reloads.
 - Lightweight layout with Tailwind CSS styling.
 - Written in TypeScript for safer components.
 
@@ -39,10 +46,9 @@ Either command prints a local URL in the terminal—open it to try the app.
 
 ## Roadmap Ideas
 
-- Persist todos in local storage.
 - Filter by completed or active tasks.
 - Add edit and delete actions.
-- Share a live demo link.
+- Offline fallback when the API is unavailable.
 
 ## Contributing
 
