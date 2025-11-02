@@ -1,11 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddTodoForm from "./components/AddTodoForm";
-import { dummyTodos } from "./data/todos";
 import TodoSummary from "./components/TodoSummary";
 import TodoList from "./components/TodoList";
+import type { Todo } from "./types/todo";
 
 export default function App() {
-  const [todos, setTodos] = useState(dummyTodos);
+  const [todos, setTodos] = useState<Todo[]>(() => {
+    if (typeof window === "undefined") return [];
+    const stored = window.localStorage.getItem("todos");
+    return stored ? (JSON.parse(stored) as Todo[]) : [];
+  });
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
 
   const handleCompletedChange = (id: number, completed: boolean) => {
     setTodos((prev) =>
